@@ -89,6 +89,8 @@ services:
     build:
       context: ./dashboard
       dockerfile: Dockerfile.traefik
+      args:
+        VITE_API_URL: http://192.168.178.92:2785
     container_name: openwa-dashboard
     restart: unless-stopped
     ports:
