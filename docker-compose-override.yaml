@@ -2,22 +2,6 @@
 # Smart Orchestration with Profiles
 
 services:
-  # ===== CORE: Traefik Reverse Proxy =====
-  traefik:
-    image: traefik:v3.0
-    container_name: openwa-traefik
-    profiles: ['with-proxy', 'full']
-    restart: unless-stopped
-    ports:
-      - '${DASHBOARD_PORT:-2886}:80'
-      - '8080:8080'
-    volumes:
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
-    labels:
-      - 'com.openwa.service=proxy'
-      - 'com.openwa.core=true'
-
   # ===== CORE: OpenWA Backend API =====
   openwa-api:
     build:
@@ -26,7 +10,7 @@ services:
     container_name: openwa-api
     restart: unless-stopped
     ports:
-      - '${API_PORT:-2785}:2785'
+      - "2785:2785"
     expose:
       - '2785'
     environment:
@@ -106,10 +90,9 @@ services:
       context: ./dashboard
       dockerfile: Dockerfile.traefik
     container_name: openwa-dashboard
-    profiles: ['with-dashboard', 'full']
     restart: unless-stopped
-    expose:
-      - '80'
+    ports:
+      - "2886:80"
     depends_on:
       - openwa-api
     labels:
